@@ -53,6 +53,7 @@ public class EventController {
 		// 13.3.3.2 - Using Errors object
 		if (errors.hasErrors()) {
 			model.addAttribute("title", "Create Event");
+			model.addAttribute("types", EventType.values());
 //			model.addAttribute("errorMsg", "Bad data!");
 			return "events/create";
 		}

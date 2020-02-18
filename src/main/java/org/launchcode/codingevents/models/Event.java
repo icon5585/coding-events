@@ -17,6 +17,7 @@ public class Event {
 
 	private EventType type;
 
+	// 13.2 - Validation annotations
 	@NotBlank(message = "Name is required.")
 	@Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
 	private String name;
@@ -24,6 +25,7 @@ public class Event {
 	@Size(max = 500, message = "Description too long!")
 	private String description;
 
+	@NotBlank(message = "Email is required!!!")
 	@Email(message = "Invalid email. Try again.")
 	private String contactEmail;
 

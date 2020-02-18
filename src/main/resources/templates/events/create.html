@@ -13,25 +13,25 @@
 <form method="post" action="/events/create">
 	<div class="form-group">
 		<label>Name
-			<input type="text" th:field="${event.name}" class="form-control">
+			<input th:field="${event.name}" class="form-control">
 		</label>
 		<p class="error" th:errors="${event.name}"></p>
 	</div>
 	<div class="form-group">
 		<label>Description
-			<input type="text" th:field="${event.description}" class="form-control">
+			<input th:field="${event.description}" class="form-control">
 		</label>
 		<p class="error" th:errors="${event.description}"></p>
 	</div>
 	<div class="form-group">
       <label>Contact Email
-            <input type="text" th:field="${event.contactEmail}" class="form-control">
+            <input th:field="${event.contactEmail}" class="form-control">
       </label>
       <p class="error" th:errors="${event.contactEmail}"></p>
    </div>
    <!-- 14.2.2.5 - Using enum value in select HTML element -->
    <div class="form-group">
-	   <label> Type
+	   <label>Type
 	   <select th:field="${event.type}">
 	      <option th:each="type : ${types}"
 	               th:value="${type}"
