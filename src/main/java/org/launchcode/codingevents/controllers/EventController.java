@@ -59,7 +59,7 @@ public class EventController {
 		}
     	
     	EventData.add(newEvent);
-       return "redirect:";
+    	return "redirect:";
     }
     
     @GetMapping("delete")
