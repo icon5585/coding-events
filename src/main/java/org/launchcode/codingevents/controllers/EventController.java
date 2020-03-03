@@ -1,10 +1,14 @@
 package org.launchcode.codingevents.controllers;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
-import org.launchcode.codingevents.data.EventData;
+import org.launchcode.codingevents.data.EventCategoryRepository;
+import org.launchcode.codingevents.data.EventRepository;
 import org.launchcode.codingevents.models.Event;
-import org.launchcode.codingevents.models.EventType;
+import org.launchcode.codingevents.models.EventCategory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -23,18 +27,50 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("events")
 public class EventController {
 
+	@Autowired
+	private EventRepository eventRepo;
+	
+	@Autowired
+	private EventCategoryRepository eventCategoryRepo;
+	
+	/*
     @GetMapping
     public String displayAllEvents(Model model) {
         model.addAttribute("title", "All Events");
         model.addAttribute("events", EventData.getAll());
         return "events/index";
     }
+	*/
 
+	// 
+    @GetMapping
+    public String displayEvents(@RequestParam(required = false) Integer categoryId, Model model) {
+
+       if (categoryId == null) {
+          model.addAttribute("title", "All Events");
+          model.addAttribute("events", eventRepo.findAll());
+       } else {
+          Optional<EventCategory> result = eventCategoryRepo.findById(categoryId);
+          if (result.isEmpty()) {
+                model.addAttribute("title", "Invalid Category ID: " + categoryId);
+          } else {
+                EventCategory category = result.get();
+                model.addAttribute("title", "Events in category: " + category.getName());
+                model.addAttribute("events", category.getEvents());
+          }
+       }
+
+       return "events/index";
+    }
+    
+    
+    
     @GetMapping("create")
     public String displayCreateEventForm(Model model) {
         model.addAttribute("title", "Create Event");
         model.addAttribute("event", new Event());		// 13.4.2.1 - We have to pass in a new Event object
-        model.addAttribute("types", EventType.values());	//14.2.2.4 - Pass enum values to the controller
+        //model.addAttribute("types", EventType.values());	//14.2.2.4 - Pass enum values to the controller
+        model.addAttribute("categories", eventCategoryRepo.findAll());
         return "events/create";
     }
 
@@ -53,19 +89,24 @@ public class EventController {
 		// 13.3.3.2 - Using Errors object
 		if (errors.hasErrors()) {
 			model.addAttribute("title", "Create Event");
-			model.addAttribute("types", EventType.values());
+			
+			// 18.2.4.1 - Replacing EventType With EventCategory
+			model.addAttribute("categories", eventCategoryRepo.findAll());
+			
+//			model.addAttribute("types", EventType.values());
 //			model.addAttribute("errorMsg", "Bad data!");
 			return "events/create";
 		}
     	
-    	EventData.add(newEvent);
+		eventRepo.save(newEvent);
+		
     	return "redirect:";
     }
     
     @GetMapping("delete")
     public String renderDeleteEventForm(Model model) {
        model.addAttribute("title", "Delete Event");
-       model.addAttribute("events", EventData.getAll());
+       model.addAttribute("events", eventRepo.findAll());
        return "events/delete";
     }
     
@@ -74,11 +115,16 @@ public class EventController {
 
          if (eventIds != null) {
              for (int id : eventIds) {
-                 EventData.remove(id);
+                 eventRepo.deleteById(id);
              }
          }
 
          return "redirect:";
     }
+    
+    
+    
+    
+    
 
 }
