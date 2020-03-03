@@ -1,7 +1,5 @@
 package org.launchcode.codingevents.models;
 
-import java.util.Objects;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -11,9 +9,7 @@ import javax.validation.constraints.Size;
  * 
  * @author Hank DeDona
  */
-public class Event {
-	private int id;
-	private static int nextId = 1;
+public class Event extends AbstractEntity {
 
 	private EventType type;
 
@@ -30,8 +26,6 @@ public class Event {
 	private String contactEmail;
 
 	public Event() {
-		this.id = nextId;
-		nextId++;
 	}
 
 	public Event(String name, String description, String contactEmail, EventType type) {
@@ -39,8 +33,6 @@ public class Event {
 		this.description = description;
 		this.contactEmail = contactEmail;
 		this.type = type;
-		this.id = nextId;
-		nextId++;
 	}
 
 	public String getName() {
@@ -57,10 +49,6 @@ public class Event {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public String getContactEmail() {
@@ -89,11 +77,6 @@ public class Event {
 			return false;
 		}
 		return ((Event) o).getId() == getId();
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
 	}
 
 	@Override
