@@ -15,6 +15,7 @@ public class EventCategory extends AbstractEntity {
 
 	// 18.3.2.1. Model Configuration
 	@OneToMany(mappedBy = "eventCategory")
+	//@JoinColumn(name = "event_category_id")
 	private final List<Event> events = new ArrayList<>();
 	
 	public EventCategory() {
